@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import distanceRoutes from "./routes/distance.routes";
 import locationRoutes from "./routes/location.routes";
+import productRoutes from "./routes/shopify/product.routes";
 import sequelize from "./config/database";
 dotenv.config();
 
@@ -9,11 +10,12 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (req,res) => {
-    return res.json({status:true, messgae:"APIs is running"})
+    return res.json({status: true, data: req.body, messgae: "APIs is running"})
 });
 
 app.use("/api/distance", distanceRoutes);
 app.use("/api/location", locationRoutes);
+app.use("/api/shopify/products", productRoutes);
 
 (async () => {
   try {
