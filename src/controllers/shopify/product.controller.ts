@@ -5,14 +5,14 @@ import productsService from "../../services/products.service";
 
 class ProductController {
     async syncAllProducts(req: Request, res: Response) {
-        const BATCH_SIZE = 15, results: string | any[] = [], ques = req.query.q as string || "Samsung";
+        const BATCH_SIZE = 15, results: string | any[] = [], ques = req.query.q as string || "Samsung", cId = Number(req.query.cId) || 3, scId = Number(req.query.scId) || 0;
         let offset = 0;
 
         const shopifyProducts = await shopifyProductService.findBy("tag", ques);
 
         while (true) {
             try {
-                const products = await productsService.fetchProducts(BATCH_SIZE, offset, ques, 3, 0, ques);
+                const products = await productsService.fetchProducts(BATCH_SIZE, offset, ques, cId, scId, ques);
                 if (products.length === 0) break;
 
                 for (const product of products) {
@@ -27,7 +27,7 @@ class ProductController {
                             results.push({ message: `Product "${p.title}" already exists.`, productId: existingProduct.id });
                         } else {
                             const created = await shopifyProductService.createProduct(p);
-                            results.push({message: `Product "${p.title}" created successfully.`, productId: created.id });
+                            results.push({ message: `Product "${p.title}" created successfully.`, productId: created.id });
                         }
                     } catch (err: any) {
                         console.error("Product Sync Error:", err.message);
@@ -52,7 +52,7 @@ class ProductController {
         while (true) {
             try {
                 let sdProduct = await productsService.fetchProducts(BATCH_SIZE, offset, ques, 3, 0, ques);
-                if(sdProduct.length === 0) break;
+                if (sdProduct.length === 0) break;
 
                 for (let i = 0; i < sdProduct.length; i++) {
                     const prodDetails = await productsService.fetchProductDetails(sdProduct[i].catalogId);
@@ -66,14 +66,14 @@ class ProductController {
             }
             offset += BATCH_SIZE;
         }
-        return res.json({status: products.length>0, count: products.length, data: products});
+        return res.json({ status: products.length > 0, count: products.length, data: products });
     }
 
     async findByTitle(req: Request, res: Response) {
         try {
             const key = Object.keys(req.query)[0] as string || "tag", value = req.query[key] as string || "SmartDukaan",
-            products = await shopifyProductService.findBy(key, value);
-            return res.json({status: products.length>0, count: products.length, data: products});
+                products = await shopifyProductService.findBy(key, value);
+            return res.json({ status: products.length > 0, count: products.length, data: products });
 
         } catch (err: any) {
             console.error("Error: ", err.message);
