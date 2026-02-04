@@ -47,7 +47,7 @@ class ProductController {
     }
 
     async smartDukaanProducts(req: Request, res: Response) {
-        const BATCH_SIZE = 15, results: string | any[] = [], ques = "Apple";
+        const BATCH_SIZE = 15, results: string | any[] = [], ques = "Apple", cId = Number(req.query.cId) || 3, scId = Number(req.query.scId) || 0;
         let offset = 0, products: any[] = [];
         while (true) {
             try {
