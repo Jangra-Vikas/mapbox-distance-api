@@ -10,7 +10,7 @@ class ApiProductService {
       return response.data?.response;
     } catch (error: any) {
       console.error("API Fetch Error:", error.response?.data || error.message);
-      throw new Error("Failed to fetch products from external API");
+      throw new Error(error.response?.data?.response?.message || "Failed to fetch products from external API");
     }
   }
   async fetchProductDetails(id: number) {
@@ -19,7 +19,7 @@ class ApiProductService {
       return response.data?.response;
     } catch (error: any) {
       console.error("API Fetch Error:", error.response?.data || error.message);
-      throw new Error("Failed to fetch product details from external API");
+      throw new Error(error.response?.data?.response?.message || "Failed to fetch product details from external API");
     }
   }
 }

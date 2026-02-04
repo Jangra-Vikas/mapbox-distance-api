@@ -39,7 +39,7 @@ class ProductController {
 
             } catch (err: any) {
                 console.error("Sync Error:", err.message);
-                //return res.status(500).json({ error: err.message });
+                return res.status(500).json({ error: err.message });
             }
         }
 
@@ -52,7 +52,6 @@ class ProductController {
         while (true) {
             try {
                 let sdProduct = await productsService.fetchProducts(BATCH_SIZE, offset, ques, 3, 0, ques);
-
                 if(sdProduct.length === 0) break;
 
                 for (let i = 0; i < sdProduct.length; i++) {
@@ -63,6 +62,7 @@ class ProductController {
 
             } catch (err: any) {
                 console.error("Sync Error:", err.message);
+                break;
             }
             offset += BATCH_SIZE;
         }

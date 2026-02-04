@@ -1,8 +1,8 @@
 export function mapApiProductToShopify(product: any, details: any) {
-    const storageMatch = product.title.match(/\((\d+GB\s+\d+GB)\)/);
-    const storageValue = storageMatch 
-    ? {variantName:storageMatch[1], sellingPrice: product.sellingPrice, mrp: product.mrp, catalogId: product.catalogId} 
-    : {variantName: "Default", sellingPrice: product.items[0].sellingPrice, mrp: product.items[0].mrp, catalogId: product.catalogId};
+  const storageMatch = product.title.match(/\((\d+GB\s+\d+GB)\)/);
+  const storageValue = storageMatch
+    ? { variantName: storageMatch[1], sellingPrice: product.sellingPrice, mrp: product.mrp, catalogId: product.catalogId }
+    : { variantName: "Default", sellingPrice: product.items[0].sellingPrice, mrp: product.items[0].mrp, catalogId: product.catalogId };
   const description = (prod: any) => {
     let html = "";
     if (prod.keySpecs?.length) {
@@ -45,7 +45,7 @@ export function mapApiProductToShopify(product: any, details: any) {
 
   for (const item of product.items) {
     for (const storage of storages) {
-      const sku = `${product.brand}-${product.superCatalogTitle}-${storage.variantName}-${item.color}`
+      const sku = `${product.brand}-${product.superCatalogTitle}-${storage.variantName}-${item.color}-${product.catalogId}-${item.item_id}`
         .replace(/\s+/g, "-")
         .toUpperCase();
 
