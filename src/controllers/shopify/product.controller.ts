@@ -30,7 +30,8 @@ class ProductController {
                             results.push({ message: `Product "${p.title}" created successfully.`, productId: created.id });
                         }
                     } catch (err: any) {
-                        console.error("Product Sync Error:", err.message);
+                        console.log("Product Sync Error:", err.stack);
+                        console.log("Error Response Body:", JSON.stringify(err.response?.body, null, 2));
                         results.push(`Error for ${product.title}: ${err.message}`);
                     }
                 }
@@ -38,7 +39,7 @@ class ProductController {
                 offset += BATCH_SIZE;
 
             } catch (err: any) {
-                console.error("Sync Error:", err.message);
+                console.log("Sync Error:", err.message);
                 return res.status(500).json({ error: err.message });
             }
         }
@@ -61,7 +62,7 @@ class ProductController {
                 }
 
             } catch (err: any) {
-                console.error("Sync Error:", err.message);
+                console.log("Sync Error:", err.message);
                 break;
             }
             offset += BATCH_SIZE;
@@ -76,7 +77,7 @@ class ProductController {
             return res.json({ status: products.length > 0, count: products.length, data: products });
 
         } catch (err: any) {
-            console.error("Error: ", err.message);
+            console.log("Error: ", err.message);
             return res.status(500).json({ error: err.message });
         }
     }
